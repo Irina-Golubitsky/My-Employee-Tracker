@@ -99,4 +99,129 @@ function AskUser() {
     });
   }
   
+  function addDept() {
+    inquirer
+      .prompt({
+        type: "input",
+        message: "Enter the name of a new department",
+        name: "newDep"
+      })
+      .then(function (res) {
+        const newDepartment = res.newDep;
+        const query = `INSERT INTO department (department_name) VALUES ("${newDepartment}")`;
+        db.query(query, function (err, res) {
+          if (err) {
+            throw err;
+          }
+          console.table(res);
+          AskUser();
+        });
+      });
+  }
+
+  function getManagers(){
+    let managerArray = [];
+    const query = 'SELECT * FROM employee'
+    db.query(query, (error, response) => {
+      if(error) throw error;
+      response.forEach((employee) => {
+        managerArray.push(employee.id + ' - '+ employee.first_name+ " "+ employee.last_name);
+      })});
+      return managerArray;
+  }
+  function getRoles(){
+    let rolesArray = [];
+    const query = 'SELECT * FROM role'
+    db.query(query, (error, response) => {
+      if(error) throw error;
+      response.forEach((role) => {
+        rolesArray.push(role.id + ' - '+ role.title);
+      })});
+      return rolesArray;
+  }
   
+  function addRole() {
+    let departmentArray = [];
+    const query = 'SELECT * FROM department'
+    db.query(query, (error, response) => {
+      if(error) throw error;
+      response.forEach((department) => {
+        departmentArray.push(department.id + ' - '+ department.department_name);
+      })});
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message: "Enter new role's title",
+          name: "roleTitle"
+        },
+        {
+          type: "input",
+          message: "Enter new role's salary",
+          name: "roleSalary"
+        },
+        {
+          type: "list",
+          message: "Select the department your new role belongs to",
+          name: "departmentID",
+          choices: departmentArray
+        }
+      ])
+      .then(function (res) {
+        const title = res.roleTitle;
+        const salary = res.roleSalary;
+         let departmentID = parseInt(res.departmentID.substring(0, res.departmentID.search(' ')));
+         console.log(departmentID);
+       const query = `INSERT INTO role (title, salary, department_id) VALUES ("${title}", "${salary}", "${departmentID}")`;
+        db.query(query, function (err, res) {
+          if (err) {
+            throw err;
+          }
+          console.table(res);
+          AskUser();
+        });
+      });
+  }
+  function addEmployee() {
+let rolesArray=getRoles();
+let managersArray=getManagers();
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message: "Enter new employee's first name",
+          name: "firstName"
+        },
+        {
+          type: "input",
+          message: "Enter new employee's last name",
+          name: "lastName"
+        },
+        {
+          type: "list",
+          message: "Select the employee's role",
+          name: "role",
+          choices: rolesArray
+        },
+        {
+          type: "list",
+          message: "Select the employee's manager",
+          name: "manager",
+          choices: managersArray
+        }
+      ])
+      .then(function (res) {
+        const firstName = res.firstName;
+        const lastName = res.lastName;
+        const roleID = parseInt(res.role.substring(0, res.role.search(' ')));
+        const managerID = parseInt(res.manager.substring(0, res.manager.search(' '))); 
+        const query = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${firstName}", "${lastName}", "${roleID}", "${managerID}")`;
+        db.query(query, function (err, res) {
+          if (err) {
+            throw err;
+          }
+          console.table(res);
+          AskUser();
+        });
+      });
+  }
