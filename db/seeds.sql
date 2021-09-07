@@ -17,13 +17,14 @@ VALUES
 ("Legal Team Lead", 250000.00, 4),
 ("Lawer", 190000.00, 4);
 -- Employee table 
-INSERT INTO employee (first_name, last_name, role_id, manager_id) 
+INSERT INTO employee (first_name, last_name, role_id) 
 VALUES 
-("John", "Doe", 1,3),
-("Mike", "Chan", 2,1),
-("Ashley", "Rodrigues", 2, NULL),
-("Kevin", "Tupik", 4,3),
-("malia", "Brown", 5, NULL),
-("Sarah", "Lourd", 5, NULL),
-("Tom", "Allen", 7,6),
-("Chritian", "Eckenrode", 2,2),
+("John", "Doe", 1),
+("Mike", "Chan", 2),
+("Ashley", "Rodrigues", 2),
+("Kevin", "Tupik", 4),
+("malia", "Brown", 5),
+("Sarah", "Lourd", 5),
+("Tom", "Allen", 7),
+("Chritian", "Eckenrode", 2);
+
