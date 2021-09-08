@@ -147,8 +147,8 @@ function AskUser() {
       if(error) throw error;
       response.forEach((department) => {
         departmentArray.push(department.id + ' - '+ department.department_name);
-      })});
-    inquirer
+      })
+      inquirer
       .prompt([
         {
           type: "input",
@@ -162,7 +162,7 @@ function AskUser() {
         },
         {
           type: "list",
-          message: "Select the department your new role belongs to",
+          message: "Select the department new role belongs to",
           name: "departmentID",
           choices: departmentArray
         }
@@ -181,6 +181,8 @@ function AskUser() {
           AskUser();
         });
       });
+    });
+    
   }
   function addEmployee() {
 let rolesArray=getRoles();
@@ -225,3 +227,44 @@ let managersArray=getManagers();
         });
       });
   }
+  
+  function updateEmployeeRole() {
+    let rolesArray=getRoles();
+    let employeeArray = [];
+    const query = 'SELECT * FROM employee'
+    db.query(query, (error, response) => {
+      if(error) throw error;
+      response.forEach((employee) => {
+        employeeArray.push(employee.id + ' - '+ employee.first_name+ " "+ employee.last_name);
+      })
+      inquirer
+      .prompt([
+        {
+            type: "list",
+            message: "Select the employee",
+            name: "employee",
+            choices: employeeArray
+          },
+          {
+            type: "list",
+            message: "Select the employee's role",
+            name: "role",
+            choices: rolesArray
+          }
+      ])
+      .then(function (res) {
+        const roleID = parseInt(res.role.substring(0, res.role.search(' ')));
+        const employeeID = parseInt(res.employee.substring(0, res.employee.search(' '))); 
+          const queryUpdate = `UPDATE employee SET role_id = "${roleID}" WHERE id = "${employeeID}"`;
+          db.query(queryUpdate, function (err, res) {
+            if (err) {
+              throw err;
+            }
+            console.table(res);
+            AskUser();
+          })
+        });
+    });
+    
+      
+      }
