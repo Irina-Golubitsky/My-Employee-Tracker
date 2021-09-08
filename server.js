@@ -1,3 +1,4 @@
+// constants
 const express = require('express');
 const db = require('./db/connection');
 const inquirer = require('inquirer');
@@ -16,7 +17,7 @@ db.connect(err => {
         AskUser();
     });
 });
-
+// main menu
 function AskUser() {
     inquirer
         .prompt({
@@ -66,7 +67,7 @@ function AskUser() {
             }
         });
 }
-
+// show all employee with role name, department name, and manager first and lastname
 function viewAllEmployees() {
     var query = `SELECT employee.id, employee.first_name, employee.last_name, role.title,
                  department.department_name AS department, role.salary, CONCAT(manager.first_name, " " , manager.last_name) AS 'manager'
@@ -80,7 +81,7 @@ function viewAllEmployees() {
         AskUser();
     });
 }
-
+// show department table
 function viewAllDept() {
     var query = "SELECT id, department_name AS department FROM department"
     db.query(query, function (err, res) {
@@ -88,7 +89,7 @@ function viewAllDept() {
         AskUser();
     });
 }
-
+// show role table with department name
 function viewAllRoles() {
     var query = `SELECT  role.id,role.title, department.department_name AS department, role.salary
       FROM role
@@ -98,7 +99,7 @@ function viewAllRoles() {
         AskUser();
     });
 }
-
+// add new department
 function addDept() {
     inquirer
         .prompt({
@@ -126,7 +127,7 @@ function addDept() {
             });
         });
 }
-
+// create an array of managers from employee table
 function getManagers() {
     let managerArray = [];
     const query = 'SELECT * FROM employee'
@@ -138,6 +139,7 @@ function getManagers() {
     });
     return managerArray;
 }
+// array of roles from role table
 function getRoles() {
     let rolesArray = [];
     const query = 'SELECT * FROM role'
@@ -149,7 +151,7 @@ function getRoles() {
     });
     return rolesArray;
 }
-
+// add new role to role table
 function addRole() {
     let departmentArray = [];
     const query = 'SELECT * FROM department'
@@ -210,6 +212,7 @@ function addRole() {
     });
 
 }
+// add new employee to employee table
 async function addEmployee() {
     let rolesArray = await getRoles();
     let managersArray = getManagers();
@@ -269,7 +272,7 @@ async function addEmployee() {
             });
         });
 }
-
+// change the employee role; update employee table
 function updateEmployeeRole() {
     let rolesArray = getRoles();
     let employeeArray = [];
@@ -310,5 +313,3 @@ function updateEmployeeRole() {
 
 
 }
-// add validation
-// add normal console.log comment after changing db

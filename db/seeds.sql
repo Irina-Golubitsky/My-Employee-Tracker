@@ -28,6 +28,12 @@ VALUES
 ("Tom", "Allen", 7),
 ("Chritian", "Eckenrode", 2);
 
---change employee table; manager id
-UPDATE employee SET manager_id = 1 WHERE id = 2
+--change employee table; add manager id
+
+UPDATE employee SET manager_id = 1 WHERE id = 2;
+UPDATE employee SET manager_id = 1 WHERE id = 2;
+UPDATE employee SET manager_id = 3 WHERE id = 1;
+UPDATE employee SET manager_id = 6 WHERE id = 7;
+UPDATE employee SET manager_id = 2 WHERE id = 8;
+
 
